@@ -1,21 +1,14 @@
 <template>
     <div class="login-page">
         <Paper class="login-page-paper">
-            <h1>NBP Voznje</h1>
+            <h1>PlanIT Rides</h1>
             <h2>Login</h2>
             <form @submit.prevent="loginUserData($event)" class="input-container">
-                <label>
-                    <span> Email </span>
-                    <input placeholder="user@example.com" name="email"/>
-                </label>
+                <v-text-field label="Email" name="email" required color="#e91e63"/>
 
-                <label>
-                    <span> Password </span>
-                    <input placeholder="password123" name="password" type="password"/>
-                </label>
-                <span class="flex-wrapper">
-            <button>login</button>
-                     </span>
+                <v-text-field label="Password" name="password" type="password" required color="#e91e63"/>
+               
+            <v-btn type="submit" color="#e91e63" dark>Login</v-btn>
             </form>
 
             <span class="register-span">
@@ -30,10 +23,27 @@
 
 <script>
 import Paper from '../ui/Paper'
+    import {loginUser} from '../../services/user.service'
+    import router from '../../routes/routes'
 
 export default {
     components: {
         Paper
+    },
+    methods: {
+        async loginUserData(event) {
+            const userData = {
+                Email: event.target.email.value,
+                Password: event.target.password.value
+            }
+            const response = await loginUser(userData)
+            if (response) {
+                alert('Successful login') 
+                router.push({name: 'User', params: {user: response}})
+            } else {
+                alert('Login not successful')
+            }
+        }
     }
 }
 </script>
@@ -64,7 +74,7 @@ export default {
     }
     h1, h2 {
         margin:0 auto;
-        color: seagreen;
+        color: #e91e63;
         /*border: 1px solid red;*/
     }
     label {
@@ -99,28 +109,12 @@ export default {
         width: 17em;
         font: inherit;
     }
-    .doctor-check {
-        margin: auto;
-        padding-top: 0.8em;
-        display: flex;
-        align-items: center;
-        align-content: flex-start;
-        /*border: 1px solid blue;*/
-        width: 10em;
-    }
-    .doctor-check > input {
-        width: 1em;
-    }
     .register-span {
         margin-top: 1em;
         align-self: center;
     }
-    .doctor {
-        pointer-events: none;
-        border: 1px solid black;
-    }
     a {
-        color: lightseagreen;
+        color: #e91e63;
         text-decoration: none;
     }
 </style>

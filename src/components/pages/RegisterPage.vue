@@ -1,35 +1,16 @@
 <template>
     <div class="register-page">
         <Paper class="register-page-paper">
-            <h1>NBP Voznje</h1>
-            <h2>Login</h2>
-            <form @submit.prevent="registerUserData($event)" class="input-container">
-                <label>
-                    <span> Name  </span>
-                    <input placeholder="John" name="name"/>
-                </label>
+            <h1>PlanIT Rides</h1>
+            <h2>Register</h2>
+            <form @submit.prevent="registerUserData($event)" class="v-text-field-container">
+                    <v-text-field label="Name" name="name" required color="#e91e63"/>
+                    <v-text-field label="Last Name" name="lastName" required color="#e91e63"/>
+                    <v-text-field label="Email" name="email" required color="#e91e63"/>
+                    <v-text-field label="Password" name="password" type="password" required color="#e91e63"/>
+                    <v-text-field label="Passport Number" name="passport" required/>
 
-                <label>
-                    <span> Last Name  </span>
-                    <input placeholder="Doe" name="lastName"/>
-                </label>
-
-                <label>
-                    <span> Email </span>
-                    <input placeholder="user@example.com" name="email"/>
-                </label>
-
-                <label>
-                    <span> Password </span>
-                    <input placeholder="password123" name="password" type="password"/>
-                </label>
-
-                <label>
-                    <span> Passport Number</span>
-                    <input placeholder="918371920393" name="passport"/>
-                </label>
-
-            <button>register</button>
+            <v-btn type="submit" color="#e91e63" dark>register</v-btn>
             </form>
 
 
@@ -43,10 +24,30 @@
 
 <script>
     import Paper from '../ui/Paper'
+    import {registerUser} from '../../services/user.service'
+    import router from '../../routes/routes'
 
     export default {
         components: {
             Paper
+        },
+        methods: {
+            async registerUserData(event) {
+                const userData = {
+                    Name: event.target.name.value,
+                    LastName: event.target.lastName.value,
+                    Email: event.target.email.value,
+                    Password: event.target.password.value,
+                    PassportNumber: event.target.passport.value,
+                }
+                const response = await registerUser(userData)
+                if (response) {
+                    alert('Successful registration') 
+                    router.push('/login')
+                } else {
+                    alert('Registration not successful')
+                }
+            }
         }
     }
 </script>
@@ -67,18 +68,18 @@
         flex-direction: column;
         align-items: stretch;
         width: 30em;
-        height: 34em;
+        height: 40em;
         padding: 2em;
         box-sizing: border-box;
         justify-content: space-evenly;
     }
-    .input-container {
+    .v-text-field-container {
         margin: 0 auto;
         /*border: 1px solid green;*/
     }
     h1, h2 {
         margin:0 auto;
-        color: seagreen;
+        color: #e91e63;
         /*border: 1px solid red;*/
     }
     label {
@@ -107,34 +108,18 @@
         width: 100%;
         text-transform: uppercase;
     }
-    input {
+    v-text-field {
         font: inherit;
         padding: 0.5em;
         width: 17em;
         font: inherit;
     }
-    .doctor-check {
-        margin: auto;
-        padding-top: 0.8em;
-        display: flex;
-        align-items: center;
-        align-content: flex-start;
-        /*border: 1px solid blue;*/
-        width: 10em;
-    }
-    .doctor-check > input {
-        width: 1em;
-    }
     .login-span {
         margin-top: 1em;
         align-self: center;
     }
-    .doctor {
-        pointer-events: none;
-        border: 1px solid black;
-    }
     a {
-        color: lightseagreen;
+        color: #e91e63;
         text-decoration: none;
     }
 </style>
