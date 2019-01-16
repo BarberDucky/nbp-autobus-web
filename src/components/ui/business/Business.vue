@@ -9,8 +9,14 @@
                 activatable
             >
             <template slot="prepend" slot-scope="{ item }">
-                <v-icon v-if="item.type == 'ride'">
+                <v-icon v-if="item.type == 'ride' && item.rideType == 0">
                     directions_bus
+                </v-icon>
+                <v-icon v-if="item.type == 'ride' && item.rideType == 1">
+                    airport_shuttle
+                </v-icon>
+                <v-icon v-if="item.type == 'ride' && item.rideType == 2">
+                    directions_car
                 </v-icon>
             </template>
 
@@ -100,7 +106,8 @@ export default {
                                 return {
                                     id: ride.Id,
                                     Name: `${ride.TakeOfStation.City} - ${ride.ArrivalStation.City}`,
-                                    type: 'ride'
+                                    type: 'ride',
+                                    rideType: ride.RideType
                                 }
                             })
                     }

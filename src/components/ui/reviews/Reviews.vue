@@ -2,8 +2,8 @@
     <div class="reviews">
         <div class="reviews-company-grade">
             <Paper class="reviews-company">
-                <span class="reviews-company-label">Company</span>
-                <select id="carrier-select"
+                <span class="reviews-company-label">Company:</span>
+                <select id="reviews-select"
                 @click="openSelect()"
                 @change="selected($event)"
                 >
@@ -14,6 +14,8 @@
                     :value="carrier.Id"
                     >{{carrier.Name}}</option>
                 </select>
+                <span class="reviews-company-label" v-if="selectedCarrier.Website">Website: <a target="_blank" :href="'//' + selectedCarrier.Website">{{selectedCarrier.Website}}</a></span>
+                <span class="reviews-company-label" v-if="selectedCarrier.PhoneNumber">Phone Number: {{selectedCarrier.PhoneNumber}}</span>
             </Paper>
 
             <Paper class="reviews-grade">
@@ -26,19 +28,20 @@
             <span class="reviews-list-label"> <v-icon style="margin-right: 0.5em;" color="#e91e63">chat</v-icon>Reviews</span>
                 <v-card v-if="selectedCarrier.Id">
                 <v-card-title>Add a review</v-card-title>
-                <form @submit.prevent="submitNewReview($event)">
-                    <input
+                <form class="add-review-form" @submit.prevent="submitNewReview($event)">
+                        
+                    <v-text-field color="#e91e63"
                         name="grade"
-                        placeholder="Grade"
+                        label="Grade"
                         type="number"
                         max="5"
                         min="1"
-                        value="3"
                         />
-                    <input
+                    
+                    <v-text-field color="#e91e63"
                         name="text"
-                        placeholder="Text"/>
-                    <button>Submit review</button>
+                        label="Text"/>
+                    <v-btn type="submit" color='#e91e63' dark >Submit</v-btn>
                 </form>
                 </v-card>
             </div>
@@ -70,17 +73,16 @@ export default {
         Paper,
         Grade
     },
-    props: ['userId'],
+    props: ['userId', 'carriers'],
     data() {
         return {
-            carriers: [],
             selectedCarrier: {},
             carrierReviews: []
         }
     },
     methods: {
         async openSelect() {
-            this.carriers = await getAllCarriers()
+            this.$emit('requestedCarriers')
         },
         async selected(event) {
             this.selectedCarrier = this.carriers.find((element) => element.Id == event.target.value)
@@ -175,9 +177,11 @@ export default {
         border-radius: 15px;
         background-color: grey;
     }
-    #carrier-select {
-        height:2em;
-        width:10em;
+    #reviews-select {
+        height: 2em;
+        width: 10em;
+        margin-left: -1.5em;
+        margin-bottom: 0;
         border: 0.5px solid grey;
     }
     .reviews-grade-number {
@@ -203,6 +207,17 @@ export default {
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
+    }
+    .add-review-form {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: 0.5em;
+        padding-top: 0;
+        margin-top: -1.5em;
+    }
+    .add-review-form > * {
+        margin-right: 0.5em;
     }
 </style>
 

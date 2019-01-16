@@ -43,6 +43,24 @@
                         >{{weekDay}}</option>
                 </select>
              </label>
+             <label>
+                <span class="select-label">Ride Type</span>
+                <select id="carrier-select"
+                    name="rideType"
+                    :value="parent.RideType"
+                    required
+                >
+                    <option
+                        value="0"
+                        >Bus</option>
+                    <option
+                        value="1"
+                        >Minibus</option>
+                    <option
+                        value="2"
+                        >Car</option>
+                </select>
+             </label>
             <v-btn type="submit" color='#e91e63' dark class="update-ride-button">Update Ride</v-btn>
         </form>
     </Paper>
@@ -70,7 +88,8 @@ export default {
                 RidePrice: event.target.ridePrice.value,
                 DayOfWeek: event.target.dayOfWeek.value,
                 TakeOfTime: event.target.takeOffTime.value,
-                ArrivalTime: event.target.arrivalTime.value
+                ArrivalTime: event.target.arrivalTime.value,
+                RideType: event.target.rideType.value
             }
             const response = await putRide(rideData, this.parent.Id)
             this.$emit('rideUpdated', response)

@@ -23,7 +23,7 @@
                 Reviews
             </v-tab>
             <v-tab-item>
-                <Reviews :userId="user.Id"/>
+                <Reviews :userId="user.Id" :carriers="reviewCarriers" @requestedCarriers="fetchCarriers()"/>
             </v-tab-item>
 
             <v-tab ripple> 
@@ -55,6 +55,7 @@ import router from '../../routes/routes'
 import {getUser} from '../../services/user.service'
 import {getAllStations} from '../../services/stations.service'
 import {getCards} from '../../services/card.service'
+import {getAllCarriers} from '../../services/carrier.service'
 
 export default {
     components: {
@@ -73,6 +74,7 @@ export default {
             paths: [],
             cards: [],
             numberOfSeats: 0,
+            reviewCarriers: [],
             active: 0
         }
     },
@@ -87,12 +89,17 @@ export default {
         async cardBought() {
             this.cards = await getCards(this.user.Id)
             this.active = 1
+        },
+        async fetchCarriers() {
+            this.reviewCarriers = await getAllCarriers()
         }
     },
     watch: {
-        active: async function tabsChange(oldTab, newTab) {
+        active: async function tabsChange(newTab) {
             if (newTab == 1) {
-                //this.cards = await getCards(this.user.Id)
+                this.cards = await getCards(this.user.Id)
+            } else if (newTab == 2) {
+                this.reviewCarriers = await getAllCarriers()
             }
         }
     },

@@ -64,6 +64,24 @@
                     >{{station.Name}}</option>
             </select>
              </label>
+             <label>
+                <span class="select-label">Ride Type</span>
+                <select id="carrier-select"
+                    name="rideType"
+                    :value="parent.RideType"
+                    required
+                >
+                    <option
+                        value="0"
+                        >Bus</option>
+                    <option
+                        value="1"
+                        >Minibus</option>
+                    <option
+                        value="2"
+                        >Car</option>
+                </select>
+             </label>
             <v-btn type="submit" color='#e91e63' dark class="add-ride-button">Add Ride</v-btn>
         </form>
         <v-divider color="#e91e63"></v-divider>
@@ -115,6 +133,7 @@ export default {
                 ArrivalTime: event.target.arrivalTime.value,
                 TakeOfStationId: event.target.takeOffStation.value,
                 ArrivalStationId: event.target.arrivalStation.value,
+                RideType: event.target.rideType.value,
                 CarrierId: this.parent.Id
             }
             if (rideData.TakeOfStationId == rideData.ArrivalStationId) {

@@ -23,6 +23,12 @@
                 type="date"
                 required
             />
+            <v-text-field color="#e91e63"
+                label="Max Price"
+                name="maxPrice"
+                type="number"
+                min="1"
+            />
             <label>
                 <span class="search-label">Take Off Station</span>
                 <select id="search-select"
@@ -49,6 +55,39 @@
                         >{{station.Name}}</option>
                 </select>
             </label>
+            <div class="search-ride-type">
+            <v-checkbox color="#e91e63"
+                label="Bus"
+                name="bus"
+            ></v-checkbox>
+            <v-checkbox color="#e91e63"
+                label="Minibus"
+                name="minibus"
+            ></v-checkbox>
+            <v-checkbox color="#e91e63"
+                label="Car"
+                name="car"
+            ></v-checkbox>
+            </div>
+            <v-checkbox color="#e91e63"
+                label="Roundabout"
+                name="roundabout"
+                v-model="isRoundabout"
+            ></v-checkbox>
+            <v-text-field color="#e91e63"
+                label="Roundabout Take off Date"
+                name="takeOffDateRound"
+                type="date"
+                required
+                v-if="isRoundabout"
+            />
+            <v-text-field color="#e91e63"
+                label="Roundabout Arrival Date"
+                name="arrivalDateRound"
+                type="date"
+                required
+                v-if="isRoundabout"
+            />
             <v-btn type="submit" color="#e91e63" dark>Find a Ride</v-btn>
         </form>
     </Paper>
@@ -62,16 +101,33 @@ export default {
     components: {
         Paper
     },
+    data() {
+        return {
+            isRoundabout: false
+        }
+    },
     props: ['stations'],
     methods: {
         async submitRidePath(event) {
+            let rideTypes = []
+            if (event.target.bus.checked)
+                rideTypes.push(0)
+            if (event.target.minibus.checked)
+                rideTypes.push(1)
+            if (event.target.car.checked)
+                rideTypes.push(2) 
+
             const pathData = {
                 TakeOfStationId: event.target.takeOffStation.value,
                 ArrivalStationId: event.target.arrivalStation.value,
                 TakeOfDate: event.target.takeOffDate.value,
                 ArrivalDate: event.target.arrivalDate.value,
                 NumberOfCards: event.target.numberOfCards.value,
-                RideTypes: [0]
+                MaxCardPrice: event.target.maxPrice.value,
+                IsRoundabout: event.target.roundabout.checked,
+                TakeOfDateRoundAbout: event.target.roundabout.checked ? event.target.takeOffDateRound.value : null,
+                ArrivalDateRoundAbout: event.target.roundabout.checked ? event.target.arrivalDateRound.value : null,
+                RideTypes: rideTypes
             }
             if (pathData.TakeOfStationId == pathData.ArrivalStationId) {
                 alert('Please enter different stations')
@@ -98,7 +154,6 @@ export default {
     margin: 2em;
     padding: 2em;
     min-width: 25em;
-    max-height: 30em;
     display: flex;
     flex-direction: column;
 }
@@ -113,12 +168,16 @@ export default {
     flex-direction: column;
 }
 #search-select {
-        height:2em;
-        width:10em;
-        border: 0.5px solid grey;
-        margin-bottom: 0.5em;
-    }
+    height:2em;
+    width:10em;
+    border: 0.5px solid grey;
+    margin-bottom: 0.5em;
+}
 .search-label {
     margin-right: 1em;
+}
+.search-ride-type {
+    display: flex;
+    flex-direction: row;
 }
 </style>
