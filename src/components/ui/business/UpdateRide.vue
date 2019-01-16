@@ -18,14 +18,14 @@
             <v-text-field color='#e91e63'
                 label="Take off Time"
                 name="takeOffTime"
-                :value="parent.TakeOffTime"
+                :value="new Date(parent.TakeOfTime).toLocaleTimeString('en',{hour12:false})"
                 type="time"
                 required
             />
             <v-text-field color='#e91e63'
                 label="Arrival Time"
                 name="arrivalTime"
-                :value="parent.ArrivalTime"
+                :value="new Date(parent.ArrivalTime).toLocaleTimeString('en',{hour12:false})"
                 type="time"
                 required
             />
