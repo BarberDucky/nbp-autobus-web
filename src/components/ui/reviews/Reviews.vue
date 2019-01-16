@@ -65,7 +65,7 @@
 <script>
 import Paper from '../Paper'
 import Grade from '../Grade'
-import {getAllCarriers, getCarrier} from '../../../services/carrier.service'
+import {getCarrier} from '../../../services/carrier.service'
 import {getCarrierReviews, postReview} from '../../../services/review.service'
 
 export default {
